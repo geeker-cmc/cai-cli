@@ -1,0 +1,14 @@
+{
+  "name": "cai-cli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "2544403004@qq.com",
+  "license": "MIT",
+  "bin": {
+  	"cai-cli": "./index.js"
+  }
+}
