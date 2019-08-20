@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/geeker-cmc/cai-cli.git"
+    "url": "git+https://github.com/geeker-cmc/cai-cli.git"
   },
   "author": "2544403004@qq.com",
   "license": "MIT",
@@ -32,5 +32,19 @@
     "inquirer": "^5.0.0",
     "ora": "^1.3.0",
     "request": "^2.83.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/geeker-cmc/cai-cli/issues"
+  },
+  "homepage": "https://github.com/geeker-cmc/cai-cli#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "react",
+    "vue",
+    "template"
+  ]
 }
