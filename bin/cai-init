@@ -1,0 +1,86 @@
+#! /usr/bin/env node
+
+const path = require('path');
+const program = require('commander');
+const inquirer = require('inquirer');
+const chalk = require('chalk');
+const fs = require('fs');
+const logger = require('../lib/logger');
+const download = require('download-git-repo');
+const ora = require('ora');
+
+
+
+const templateList = [
+    {
+        desc: 'rect - pc端react模板'
+    },
+    {
+        desc: 'vue - pc端vue模板'
+    }
+]
+class Init{
+   constructor(){
+       this.projectName = process.argv[2];
+       this.processArgv = process.argv;
+       this.templateList = templateList;
+       this.ora = ora;
+       this.init();
+   }
+
+   init(){
+      if(this.hasProjectName()){  // 有输入项目名后
+        this.setProjectName();
+      } else {
+        logger.error('请输入项目名')
+      }
+   }
+
+   hasProjectName() {
+   return this.processArgv.length === 4 && this.projectName !== '[object Object]'
+   }
+
+  setProjectName() {
+       if(fs.existsSync(path.resolve(this.projectName))){   
+         inquirer.prompt([{
+               type: 'confirm',
+               message: '已存在该目录，是否做覆盖操作？',
+               name: 'isCover',
+               default: true,
+           }]).then(answers => {
+               logger.error(JSON.stringify(answers));
+               this.loadTemplateType()
+           }).catch(logger.err)
+       } else {
+           this.loadTemplateType()
+       }
+   }
+
+   loadTemplateType() {
+       console.log(JSON.stringify(this.templateList), 'this.templateList')
+       inquirer.prompt([{
+           type: 'list',
+           message: '请选择一种模板',
+           name: 'template',
+           choices:[ new inquirer.Separator('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'), ...(this.templateList.map(template => template.desc))]
+       }]).then(answers => {
+            this.ora =  this.ora(`开始下载react模板`)
+            this.ora.start();
+
+             download('github:cai-template/react-template', this.projectName, err => {
+                this.ora.stop();
+                if(err) logger.error('下载失败')
+             })
+       })
+   }
+   
+}
+
+
+module.exports = new Init();
+
+
+
+
+
+

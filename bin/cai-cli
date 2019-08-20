@@ -1,30 +1,49 @@
 #! /usr/bin/env node
 
-var program = require('commander');
+const program = require('commander');
+const chalk = require('chalk');
 
+const configuredCommand = [
+  {
+    commandName: 'init',
+    desc: '快速生成一个项目'
+  },
+  {
+    commandName: 'list',
+    desc: '构建api文档'
+  }
+]
 
 program
-  .version(require('../package').version)
+  .version(require('../package').version, '-v, --version', '版本号')
   .usage('<command> [options]')
-  .option('-v, --version', '查看版本号',() => {
-  	console.log('查看版本号')
-  })
-  .option('-s, --source [type]', '设置模板来源')
-  .option('-h, --help', '帮助',() => {
-  	console.log('帮助')
-  })
+  .option('-s, --source [source]', '设置模板来源')
+  .helpOption('-h, --help', '帮助文档')
+
+
+configuredCommand.forEach(conmandItem => {
+  program.command(conmandItem.commandName, conmandItem.desc)
+})
+
 
 program
-  .command('new', '快速的生成一个项目')
-  .command('server', '快速用当前目录创建服务器，可用于本地调试')
-  .command('build', '给当前目录打包，可用于上线发布')
-  .command('list', '构建api文档模板')
-
-
-
-
-
+  .command('*')
+  .action(env => {
+    if(!configuredCommand.map(commandItem => commandItem.commandName).includes(env)){
+      console.log(`暂未配置${chalk.red(env)}命令`)
+      program.help()
+    }
+  })
+  
+program.on('--help', () => {
+  console.log('')
+  console.log('Examples:')
+  console.log('$ cai --help')
+  console.log('$ cai -h')
+})
 
 program.parse(process.argv)
+
+
 
 
